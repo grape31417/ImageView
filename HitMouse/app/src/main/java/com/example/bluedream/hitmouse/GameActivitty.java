@@ -2,6 +2,9 @@ package com.example.bluedream.hitmouse;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -47,7 +50,7 @@ public class GameActivitty extends AppCompatActivity {
     GifImageView mouse12;
 
     public static int THREAD_SLEEP_TIME = 1000;
-    public static  int THREAD_Hammer_TIME = 200;
+    public static int THREAD_Hammer_TIME = 200;
     public static final int TIME = 30;
     @BindView(R.id.Time)
     TextView Time;
@@ -58,28 +61,36 @@ public class GameActivitty extends AppCompatActivity {
     @BindView(R.id.imghammer)
     ImageView imghammer;
     private int next = 99;
+    private int next2 = 99;
     private Random random = new Random();
     private ArrayList<GifImageView> mousearr = new ArrayList<>();
 
-    private int level =1;
+    private int level = 1;
     private int time;
     private int totalTime = TIME;
     private int hammerpic = 1;
     private Thread t = null;
+    private Thread t2 = null;
     private Thread h = null;
     private int score = 0;
     private int old;
-    boolean firstClick = true;
-    private int speed = 3;
+    private int old2;
+    private int speed = 1;
+    MediaPlayer mp ;
+    private  SoundPool soundPool;
+    private int alertId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_activitty);
         ButterKnife.bind(this);
+        mp= MediaPlayer.create(GameActivitty.this, R.raw.battle);
+        mp.setLooping(true);
+        soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
+        alertId = soundPool.load(this, R.raw.hit, 1);
         initOnClick();
         GameStartCheck();
-
 
     }
 
@@ -91,6 +102,7 @@ public class GameActivitty extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 ThreadTime1();
+                mp.start();
             }
         });
 
@@ -100,38 +112,95 @@ public class GameActivitty extends AppCompatActivity {
                 GameActivitty.this.finish();
             }
         });
+        gameStartCheck.setCancelable(false);
         gameStartCheck.show();
     }
 
-    private void GameContinue()
-    {
+    private void GameContinue() {
         AlertDialog.Builder gameContinue = new AlertDialog.Builder(GameActivitty.this);
         gameContinue.setTitle("恭喜");
-        gameContinue.setMessage("接續到下一關嗎?");
+        gameContinue.setMessage("接續到下一關嗎? ");
         gameContinue.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                if(level==2)
-                go2ThreadTime();
+                if (level == 2)
+                    go2ThreadTime();
+                if (level == 3)
+                    go3ThreadTime();
             }
         });
 
         gameContinue.setNegativeButton("結束遊戲", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                Intent it =new Intent();
-                it.setClass(GameActivitty.this,GameOverActivity.class);
-                it.putExtra("score",score);
+                Bundle bundle=new Bundle();
+                bundle.putInt("score",score);
+                Intent it = new Intent();
+                it.setClass(GameActivitty.this, GameOverActivity.class);
+                it.putExtras(bundle);
                 startActivity(it);
+                mp.stop();
+                finish();
             }
         });
+        gameContinue.setCancelable(false);
         gameContinue.show();
     }
 
 
     private void go2ThreadTime() {
-        THREAD_SLEEP_TIME=750;
-        speed=4;
+        THREAD_SLEEP_TIME = 500;
+        speed = 2;
+        next = 99;
+        time = 0;
+        totalTime = TIME;
+        clearmouse ();
+
+        if (t == null) {
+            t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (totalTime != 0) {
+                            Thread.sleep(THREAD_SLEEP_TIME);
+                            if (next != 99)
+                                old = next;
+                            time++;
+                            if (time % speed == 0)
+                                totalTime--;
+                            next = random.nextInt(12);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mousearr.get(old).setVisibility(View.INVISIBLE);
+                                    mousearr.get(next).setVisibility(View.VISIBLE);
+                                    String s = Integer.toString(totalTime);
+                                    Time.setText(s);
+                                }
+                            });
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (totalTime == 0) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                t.interrupt();
+                                t = null;
+                                level++;
+                                GameContinue();
+
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        t.start();
+
 
     }
 
@@ -165,8 +234,23 @@ public class GameActivitty extends AppCompatActivity {
         mouse12.setOnTouchListener(Hit);
     }
 
+    private void clearmouse ()
+    {
+        for(int i=0;i<mousearr.size();i++)
+        {
+            mousearr.get(i).setVisibility(View.INVISIBLE);
+        }
+    }
+
 
     private void ThreadTime1() {
+        THREAD_SLEEP_TIME = 1000;
+        speed = 1;
+        next = 99;
+        time = 0;
+        clearmouse ();
+
+
         if (t == null) {
             t = new Thread(new Runnable() {
                 @Override
@@ -176,12 +260,10 @@ public class GameActivitty extends AppCompatActivity {
                             Thread.sleep(THREAD_SLEEP_TIME);
                             if (next != 99)
                                 old = next;
-
+                            time++;
                             if (time % speed == 0)
                                 totalTime--;
                             next = random.nextInt(12);
-                            firstClick = true;
-
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -198,7 +280,16 @@ public class GameActivitty extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     if (totalTime == 0) {
-                        finish();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                t.interrupt();
+                                t = null;
+                                GameContinue();
+                                level++;
+                            }
+                        });
+
                     }
                 }
             });
@@ -206,19 +297,111 @@ public class GameActivitty extends AppCompatActivity {
         t.start();
     }
 
+    private void go3ThreadTime() {
+        time = 0;
+        totalTime = TIME;
+        clearmouse ();
+
+        if (t == null) {
+            t = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (totalTime != 0) {
+                            Thread.sleep(THREAD_SLEEP_TIME);
+                            if (next != 99)
+                                old = next;
+                            time++;
+                            if (time % speed == 0)
+                                totalTime--;
+                            next = random.nextInt(12);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mousearr.get(old).setVisibility(View.INVISIBLE);
+                                    mousearr.get(next).setVisibility(View.VISIBLE);
+                                    String s = Integer.toString(totalTime);
+                                    Time.setText(s);
+                                }
+                            });
+                        }
 
 
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (totalTime == 0) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                t.interrupt();
+                                t = null;
+                                Bundle bundle=new Bundle();
+                                bundle.putInt("score",score);
+                                Intent it = new Intent();
+                                it.setClass(GameActivitty.this, GameOverActivity.class);
+                                it.putExtras(bundle);
+                                startActivity(it);
+                                mp.stop();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+        t.start();
+
+
+        if (t2 == null) {//第二隻老鼠
+            t2 = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (totalTime != 0) {
+                            Thread.sleep(random.nextInt(500) + 500);
+                            if (next2 != 99)
+                                old2 = next2;
+                            next2 = random.nextInt(12);
+
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mousearr.get(old2).setVisibility(View.INVISIBLE);
+                                    mousearr.get(next2).setVisibility(View.VISIBLE);
+                                }
+                            });
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (totalTime == 0) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                t2.interrupt();
+                                t2 = null;
+                            }
+                        });
+                    }
+
+                }
+            });
+        }
+        t2.start();
+    }
 
     GifImageView.OnTouchListener Hit = new GifImageView.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
-            if (firstClick == true) {
+            if (view.getVisibility() == View.VISIBLE) {
                 VibratorUtil.Vibrate(GameActivitty.this, 200);
                 score = score + 10;
                 String s = Integer.toString(score);
                 txtScore.setText(s);
                 HammerTime(view);
-                firstClick = false;
             }
             return false;
         }
@@ -232,6 +415,7 @@ public class GameActivitty extends AppCompatActivity {
         imghammer.setY(y - 20);
         imghammer.setImageResource(R.drawable.hammer1);
         imghammer.setVisibility(View.VISIBLE);
+        soundPool.stop(alertId);
 
         if (h == null) {
             h = new Thread(new Runnable() {
@@ -246,6 +430,7 @@ public class GameActivitty extends AppCompatActivity {
                                 public void run() {
                                     hammerpic = 2;
                                     imghammer.setImageResource(R.drawable.hammer2);
+                                    soundPool.play(alertId, 1.0F, 1.0F, 0, 0, 1.0F);
                                 }
                             });
                             //Thread.sleep(THREAD_Hammer_TIME);
@@ -263,7 +448,7 @@ public class GameActivitty extends AppCompatActivity {
 
                             }
                         });
-                        h.interrupt();
+                        // h.interrupt();
                         h = null;
 
                     }
