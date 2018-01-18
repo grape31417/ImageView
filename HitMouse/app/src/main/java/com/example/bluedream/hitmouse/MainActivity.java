@@ -12,7 +12,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,9 +39,10 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences scoresave;
     public static double lat;
     public static double lng;
-    @BindView(R.id.txtlocation)
-    TextView txtlocation;
     OkHttpClient client = new OkHttpClient();
+    @BindView(R.id.GetItem)
+    Button GetItem;
+    private boolean getadddtime=false;
 
 
     @Override
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        scoresave = getSharedPreferences("scoresave", MODE_PRIVATE);
         firstplayset();
         locateUser();
     }
@@ -54,10 +59,10 @@ public class MainActivity extends AppCompatActivity {
         firstplay = getSharedPreferences("first_play", MODE_PRIVATE);
         if (firstplay.getBoolean("first_play", false) == false) {
             firstplay.edit().putBoolean("first_play", true).commit();
-            scoresave = getSharedPreferences("scoresave", MODE_PRIVATE);
-            scoresave.edit().putString("name1", "").putInt("score1", 0).putString("lat1","0").putString("lng1","0").commit();
-            scoresave.edit().putString("name2", "").putInt("score2", 0).putString("lat2","0").putString("lng2","0").commit();
-            scoresave.edit().putString("name3", "").putInt("score3", 0).putString("lat3","0").putString("lng3","0").commit();
+            scoresave.edit().putString("name1", "").putInt("score1", 0).putString("lat1", "0").putString("lng1", "0").commit();
+            scoresave.edit().putString("name2", "").putInt("score2", 0).putString("lat2", "0").putString("lng2", "0").commit();
+            scoresave.edit().putString("name3", "").putInt("score3", 0).putString("lat3", "0").putString("lng3", "0").commit();
+            scoresave.edit().putInt("timeadd",0).commit();
         }
     }
 
@@ -78,13 +83,33 @@ public class MainActivity extends AppCompatActivity {
             lat = location.getLatitude();
             lng = location.getLongitude();
             String s = lat + " " + lng;
-            txtlocation.setText(s);
-
         }
     }
 
 
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                if(result.getContents().equals("addtime"))
+                {
+                    Toast.makeText(this,"已獲得一個加時道具",Toast.LENGTH_SHORT).show();
+                    scoresave.edit().putInt("timeadd",scoresave.getInt("timeadd",0)+1).commit();
+                }
+                else
+                    Toast.makeText(this,"無效的條碼",Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+
+        }
+    }
 
 
     @OnClick(R.id.GameStart)
@@ -100,7 +125,11 @@ public class MainActivity extends AppCompatActivity {
         it.setClass(MainActivity.this, ScoreActivity.class);
         startActivity(it);
 
+    }
 
+    @OnClick(R.id.GetItem)
+    public void onViewClicked() {
+        new IntentIntegrator(this).initiateScan();
     }
 
     @OnClick(R.id.EndGame)
@@ -122,4 +151,6 @@ public class MainActivity extends AppCompatActivity {
     @OnShowRationale({Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION})
     void need(final PermissionRequest request) {
     }
+
+
 }

@@ -113,7 +113,7 @@ public class GameOverActivity extends AppCompatActivity {
     @OnClick(R.id.OKbutton)
     public void onViewClicked() {
         String name;
-        if(editText.getText().equals(""))
+        if(editText.getText().toString().equals(""))
             name="無名氏";
         else
         name=editText.getText().toString();

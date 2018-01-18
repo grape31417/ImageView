@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">HitMouse</string>
+    <string name="title_activity_maps">HitMouse</string>
 </resources>

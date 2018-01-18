@@ -2,12 +2,14 @@ package com.example.bluedream.hitmouse;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -51,7 +53,7 @@ public class GameActivitty extends AppCompatActivity {
 
     public static int THREAD_SLEEP_TIME = 1000;
     public static int THREAD_Hammer_TIME = 200;
-    public static final int TIME = 30;
+    public int TIME = 30;
     @BindView(R.id.Time)
     TextView Time;
     @BindView(R.id.txtScore)
@@ -79,6 +81,9 @@ public class GameActivitty extends AppCompatActivity {
     MediaPlayer mp ;
     private  SoundPool soundPool;
     private int alertId;
+    boolean addtime=false;
+    private SharedPreferences scoresave;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +94,7 @@ public class GameActivitty extends AppCompatActivity {
         mp.setLooping(true);
         soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
         alertId = soundPool.load(this, R.raw.hit, 1);
+        scoresave = getSharedPreferences("scoresave", MODE_PRIVATE);
         initOnClick();
         GameStartCheck();
 
@@ -101,8 +107,13 @@ public class GameActivitty extends AppCompatActivity {
         gameStartCheck.setPositiveButton("是", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                ThreadTime1();
-                mp.start();
+                if(scoresave.getInt("timeadd",0)>0)
+                    checkItem();
+                else {
+                    Time.setVisibility(View.VISIBLE);
+                    ThreadTime1();
+                    mp.start();
+                }
             }
         });
 
@@ -113,7 +124,10 @@ public class GameActivitty extends AppCompatActivity {
             }
         });
         gameStartCheck.setCancelable(false);
-        gameStartCheck.show();
+        if(!isFinishing()) {
+            gameStartCheck.show();
+        }
+
     }
 
     private void GameContinue() {
@@ -144,12 +158,16 @@ public class GameActivitty extends AppCompatActivity {
             }
         });
         gameContinue.setCancelable(false);
-        gameContinue.show();
+
+        if(!isFinishing()) {
+            gameContinue.show();
+        }
     }
 
 
     private void go2ThreadTime() {
         THREAD_SLEEP_TIME = 500;
+        THREAD_Hammer_TIME=100;
         speed = 2;
         next = 99;
         time = 0;
@@ -242,12 +260,12 @@ public class GameActivitty extends AppCompatActivity {
         }
     }
 
-
     private void ThreadTime1() {
         THREAD_SLEEP_TIME = 1000;
         speed = 1;
         next = 99;
         time = 0;
+        totalTime=TIME;
         clearmouse ();
 
 
@@ -343,6 +361,7 @@ public class GameActivitty extends AppCompatActivity {
                                 it.putExtras(bundle);
                                 startActivity(it);
                                 mp.stop();
+                                finish();
                             }
                         });
                     }
@@ -393,9 +412,44 @@ public class GameActivitty extends AppCompatActivity {
         t2.start();
     }
 
+    private void checkItem()
+    {
+         final int itemaddtimes=scoresave.getInt("timeadd",0);
+
+        AlertDialog.Builder useItemCheck = new AlertDialog.Builder(GameActivitty.this);
+        useItemCheck.setTitle("使用道具");
+        useItemCheck.setMessage("你擁有"+itemaddtimes+"個加時道具,使用後可增加10秒,要使用嗎?");
+        useItemCheck.setPositiveButton("是", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                scoresave.edit().putInt("timeadd",itemaddtimes-1).commit();
+                TIME=TIME+10;
+                Time.setText("40");
+                Time.setVisibility(View.VISIBLE);
+                ThreadTime1();
+                mp.start();
+            }
+        });
+
+        useItemCheck.setNegativeButton("否", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ThreadTime1();
+                mp.start();
+            }
+        });
+        useItemCheck.setCancelable(false);
+        useItemCheck.show();
+
+
+
+
+    }
+
     GifImageView.OnTouchListener Hit = new GifImageView.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
+            txtScore.setVisibility(View.VISIBLE);
             if (view.getVisibility() == View.VISIBLE) {
                 VibratorUtil.Vibrate(GameActivitty.this, 200);
                 score = score + 10;
@@ -459,6 +513,71 @@ public class GameActivitty extends AppCompatActivity {
         }
         h.start();
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+
+        if ((keyCode == KeyEvent.KEYCODE_BACK)) {   //確定按下退出鍵
+
+            ConfirmExit(); //呼叫ConfirmExit()函數
+
+            return true;
+
+        }
+
+        return super.onKeyDown(keyCode, event);
+
+    }
+
+
+    private void closeThread()
+    {
+        if(t!=null)
+            t.interrupt();
+        if(t2!=null)
+            t2.interrupt();
+        if(h!=null)
+            h.interrupt();
+        t=null;
+        t2=null;
+        h=null;
+    }
+
+    public void ConfirmExit(){
+
+        AlertDialog.Builder ad=new AlertDialog.Builder(GameActivitty.this); //創建訊息方塊
+
+        ad.setTitle("離開");
+
+        ad.setMessage("確定要離開?");
+
+        ad.setPositiveButton("是", new DialogInterface.OnClickListener() { //按"是",則退出應用程式
+
+            public void onClick(DialogInterface dialog, int i) {
+                closeThread();
+                GameActivitty.this.finish();//關閉activity
+
+            }
+
+        });
+
+        ad.setNegativeButton("否",new DialogInterface.OnClickListener() { //按"否",則不執行任何操作
+
+            public void onClick(DialogInterface dialog, int i) {
+
+            }
+
+        });
+
+        if(!isFinishing()) {
+            ad.show();
+        }
+
+
+    }
+
+
 
 
 }
