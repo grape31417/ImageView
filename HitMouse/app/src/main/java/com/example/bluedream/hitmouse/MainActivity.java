@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
@@ -114,10 +115,28 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.GameStart)
     public void onGameStartClicked() {
+        Bundle bundle=new Bundle();
         Intent it = new Intent();
+        Configuration configuration=getResources().getConfiguration();
+        //获取屏幕方向
+        int l=configuration.ORIENTATION_LANDSCAPE;
+        int p=configuration.ORIENTATION_PORTRAIT;
+        if (configuration.orientation==l) {
+            //System.out.println("现在是横屏");
+            bundle.putInt("windowset",2);
+        }
+        if (configuration.orientation==p) {
+           bundle.putInt("windowset",1);
+            //System.out.println("现在是竖屏");
+        }
+
+         it.putExtras(bundle);
+
         it.setClass(MainActivity.this, GameActivitty.class);
         startActivity(it);
     }
+
+
 
     @OnClick(R.id.HighScore)
     public void onHighScoreClicked() {
