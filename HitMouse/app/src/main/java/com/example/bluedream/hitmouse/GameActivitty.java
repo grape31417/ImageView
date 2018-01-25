@@ -83,10 +83,14 @@ public class GameActivitty extends AppCompatActivity {
     private SoundPool soundPool;
     private int alertId;
     boolean pause = false;
-    private SharedPreferences scoresave;
+    boolean mppause = false;
+    boolean backkeydown = false;
+    private SharedPreferences scoresave, firstplay;
     private int pausetime;
+    private int sound, vib;
+    AlertDialog.Builder ad, cc;
 
-
+    AlertDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,8 +116,11 @@ public class GameActivitty extends AppCompatActivity {
         soundPool = new SoundPool(1, AudioManager.STREAM_MUSIC, 5);
         alertId = soundPool.load(this, R.raw.hit, 1);
         scoresave = getSharedPreferences("scoresave", MODE_PRIVATE);
+        firstplay = getSharedPreferences("first_play", MODE_PRIVATE);
         initOnClick();
+        gameset();
         GameStartCheck();
+
 
     }
 
@@ -181,19 +188,26 @@ public class GameActivitty extends AppCompatActivity {
         }
     }
 
+    private void gameset() {
+        vib = firstplay.getInt("vib", 1);
+        sound = firstplay.getInt("sound", 1);
+    }
+
 
     private void go2ThreadTime() {
-        THREAD_SLEEP_TIME = 500;
-        THREAD_Hammer_TIME = 100;
-        speed = 2;
-        next = 99;
-        time = 0;
+
         totalTime = TIME;
         if (pause == true) {
             totalTime = pausetime;
             pause = false;
+        } else {
+            THREAD_SLEEP_TIME = 500;
+            THREAD_Hammer_TIME = 100;
+            speed = 2;
+            next = 99;
+            time = 0;
+            clearmouse();
         }
-        clearmouse();
 
         if (t == null) {
             t = new Thread(new Runnable() {
@@ -211,7 +225,8 @@ public class GameActivitty extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mousearr.get(old).setVisibility(View.INVISIBLE);
+                                    if (h == null && mousearr.get(old).getVisibility() == View.VISIBLE)
+                                        mousearr.get(old).setVisibility(View.INVISIBLE);
                                     mousearr.get(next).setVisibility(View.VISIBLE);
                                     String s = Integer.toString(totalTime);
                                     Time.setText(s);
@@ -223,7 +238,7 @@ public class GameActivitty extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (totalTime == 0) {
+                    if (totalTime <= 0) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -280,14 +295,16 @@ public class GameActivitty extends AppCompatActivity {
     }
 
     private void ThreadTime1() {
-        THREAD_SLEEP_TIME = 1000;
-        speed = 1;
-        next = 99;
-        time = 0;
-        totalTime = TIME;
+
         if (pause == true) {
             totalTime = pausetime;
             pause = false;
+        } else {
+            THREAD_SLEEP_TIME = 1000;
+            speed = 1;
+            next = 99;
+            time = 0;
+            totalTime = TIME;
         }
         clearmouse();
 
@@ -308,7 +325,8 @@ public class GameActivitty extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    mousearr.get(old).setVisibility(View.INVISIBLE);
+                                    if (h == null && mousearr.get(old).getVisibility() == View.VISIBLE)
+                                        mousearr.get(old).setVisibility(View.INVISIBLE);
                                     mousearr.get(next).setVisibility(View.VISIBLE);
                                     String s = Integer.toString(totalTime);
                                     Time.setText(s);
@@ -320,7 +338,7 @@ public class GameActivitty extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (totalTime == 0) {
+                    if (totalTime <= 0) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -339,13 +357,16 @@ public class GameActivitty extends AppCompatActivity {
     }
 
     private void go3ThreadTime() {
-        time = 0;
-        totalTime = TIME;
+
         if (pause == true) {
             totalTime = pausetime;
             pause = false;
+        } else {
+            time = 0;
+            totalTime = TIME;
+            clearmouse();
         }
-        clearmouse();
+
 
         if (t == null) {
             t = new Thread(new Runnable() {
@@ -363,6 +384,7 @@ public class GameActivitty extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    // if(h==null&&mousearr.get(old).getVisibility()==View.VISIBLE)
                                     mousearr.get(old).setVisibility(View.INVISIBLE);
                                     mousearr.get(next).setVisibility(View.VISIBLE);
                                     String s = Integer.toString(totalTime);
@@ -375,7 +397,7 @@ public class GameActivitty extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (totalTime == 0) {
+                    if (totalTime <= 0) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -413,6 +435,7 @@ public class GameActivitty extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
+                                    // if(h==null&&mousearr.get(old2).getVisibility()==View.VISIBLE)
                                     mousearr.get(old2).setVisibility(View.INVISIBLE);
                                     mousearr.get(next2).setVisibility(View.VISIBLE);
                                 }
@@ -423,12 +446,10 @@ public class GameActivitty extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (totalTime == 0) {
+                    if (totalTime <= 0) {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                t2.interrupt();
-                                t2 = null;
                             }
                         });
                     }
@@ -475,7 +496,8 @@ public class GameActivitty extends AppCompatActivity {
         public boolean onTouch(View view, MotionEvent motionEvent) {
             txtScore.setVisibility(View.VISIBLE);
             if (view.getVisibility() == View.VISIBLE) {
-                VibratorUtil.Vibrate(GameActivitty.this, 200);
+                if (vib == 1)
+                    VibratorUtil.Vibrate(GameActivitty.this, 200);
                 score = score + 10;
                 String s = Integer.toString(score);
                 txtScore.setText(s);
@@ -508,7 +530,8 @@ public class GameActivitty extends AppCompatActivity {
                                 public void run() {
                                     hammerpic = 2;
                                     imghammer.setImageResource(R.drawable.hammer2);
-                                    soundPool.play(alertId, 1.0F, 1.0F, 0, 0, 1.0F);
+                                    if (sound == 1)
+                                        soundPool.play(alertId, 1.0F, 1.0F, 0, 0, 1.0F);
                                 }
                             });
                             //Thread.sleep(THREAD_Hammer_TIME);
@@ -526,7 +549,6 @@ public class GameActivitty extends AppCompatActivity {
 
                             }
                         });
-                        // h.interrupt();
                         h = null;
 
                     }
@@ -538,31 +560,70 @@ public class GameActivitty extends AppCompatActivity {
         h.start();
     }
 
+    private void pause() {
+        if (t != null) {
+            t.interrupt();
+            t = null;
+            pausetime = totalTime;
+            pause = true;
+        }
+
+        if (t2 != null) {
+            t2.interrupt();
+            t2 = null;
+            pausetime = totalTime;
+            pause = true;
+        }
+
+        if (h != null) {
+            h.interrupt();
+            h = null;
+        }
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if ((keyCode == KeyEvent.KEYCODE_BACK)) {   //確定按下退出鍵
-            if (t != null) {
-                t.interrupt();
-                t = null;
-                pausetime = totalTime;
-                pause = true;
-            }
-
-            if (t2 != null) {
-                t2.interrupt();
-                t2 = null;
-                pausetime = totalTime;
-                pause = true;
-            }
+            backkeydown = true;
+            pause();
             ConfirmExit(); //呼叫ConfirmExit()函數
-
             return true;
 
         }
+        if (KeyEvent.KEYCODE_HOME == keyCode) {
+            pause();
+            onPause();
+            return true;
+        }
+
 
         return super.onKeyDown(keyCode, event);
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (backkeydown == false) {
+            pause();
+            mp.pause();
+            mppause = true;
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (pause == true ) {
+            dialog.dismiss();
+            confirmcontinue();
+        }
+        if (mppause == true) {
+            mppause = false;
+            mp.start();
+        }
+        backkeydown = false;
 
     }
 
@@ -582,9 +643,10 @@ public class GameActivitty extends AppCompatActivity {
     public void ConfirmExit() {
 
 
-        AlertDialog.Builder ad = new AlertDialog.Builder(GameActivitty.this); //創建訊息方塊
+        ad = new AlertDialog.Builder(GameActivitty.this); //創建訊息方塊
 
-        ad.setTitle("離開");
+        ad.setTitle("暫停");
+        ad.setCancelable(false);
 
         ad.setMessage("確定要離開?");
 
@@ -595,13 +657,31 @@ public class GameActivitty extends AppCompatActivity {
                 GameActivitty.this.finish();//關閉activity
                 mp.stop();
 
+
             }
 
         });
 
-        ad.setNegativeButton("否", new DialogInterface.OnClickListener() { //按"否",則不執行任何操作
+        ad.setNeutralButton("設定", new DialogInterface.OnClickListener() { //按"是",則退出應用程式
 
             public void onClick(DialogInterface dialog, int i) {
+                Intent it = new Intent();
+                Bundle bundle = new Bundle();
+                bundle.putInt("gamemode", 1);
+                it.putExtras(bundle);
+                it.setClass(GameActivitty.this, GameSetActivity.class);
+                startActivityForResult(it, 1);
+            }
+
+        });
+
+
+        ad.setNegativeButton("否", new DialogInterface.OnClickListener()
+
+        { //按"否",則不執行任何操作
+
+            public void onClick(DialogInterface dialog, int i) {
+
                 switch (level) {
                     case 1:
                         ThreadTime1();
@@ -618,13 +698,58 @@ public class GameActivitty extends AppCompatActivity {
 
         });
 
-        if (!isFinishing()) {
-            ad.show();
+        if (!isFinishing())
+        {
+           dialog= ad.show();
         }
+
 
 
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                gameset();
+            }
+        }
+
+
+    }
+
+    private void confirmcontinue() {
+        cc = new AlertDialog.Builder(GameActivitty.this);
+        cc.setTitle("暫停中");
+
+        cc.setMessage("按是繼續遊戲");
+        cc.setCancelable(false);
+
+        cc.setPositiveButton("是", new DialogInterface.OnClickListener() { //按"是",則退出應用程式
+
+            public void onClick(DialogInterface dialog, int i) {
+
+
+                switch (level) {
+                    case 1:
+                        ThreadTime1();
+                        break;
+                    case 2:
+                        go2ThreadTime();
+                        break;
+                    case 3:
+                        go3ThreadTime();
+                        break;
+                }
+
+            }
+
+        });
+        if (!isFinishing())
+        cc.show();
+    }
 }
+
 

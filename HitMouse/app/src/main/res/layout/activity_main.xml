@@ -18,34 +18,52 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <Button
-
-        android:id="@+id/GameStart"
-        android:layout_width="330dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="GameStart" />
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/HighScore"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="HighScore" />
+        <Button
 
-    <Button
-        android:id="@+id/GetItem"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="GetItem" />
+            android:id="@+id/GameStart"
+            android:layout_width="360dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="GameStart" />
 
-    <Button
-        android:id="@+id/EndGame"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="EndGame" />
+        <Button
+            android:id="@+id/gameset"
+            android:layout_width="330dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="GameSet" />
+
+        <Button
+            android:id="@+id/HighScore"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="HighScore" />
+
+        <Button
+            android:id="@+id/GetItem"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="GetItem" />
+
+        <Button
+            android:id="@+id/EndGame"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="EndGame" />
+    </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>

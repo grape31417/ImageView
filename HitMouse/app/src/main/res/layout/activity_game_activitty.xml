@@ -30,9 +30,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse1"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dip"
+        android:layout_marginLeft="20dip"
         android:layout_marginTop="160dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -40,9 +40,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse2"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="160dip"
+        android:layout_marginLeft="150dip"
         android:layout_marginTop="160dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -51,9 +51,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse3"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="290dip"
+        android:layout_marginLeft="280dip"
         android:layout_marginTop="160dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -61,9 +61,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse4"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dip"
+        android:layout_marginLeft="50dip"
         android:layout_marginTop="260dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -71,9 +71,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse5"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="190dip"
+        android:layout_marginLeft="180dip"
         android:layout_marginTop="260dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -81,9 +81,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse6"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="310dip"
+        android:layout_marginLeft="300dip"
         android:layout_marginTop="260dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -91,9 +91,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse7"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dip"
+        android:layout_marginLeft="20dip"
         android:layout_marginTop="360dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -101,9 +101,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse8"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="160dip"
+        android:layout_marginLeft="150dip"
         android:layout_marginTop="360dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -111,9 +111,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse9"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="280dip"
+        android:layout_marginLeft="270dip"
         android:layout_marginTop="360dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -122,9 +122,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse10"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="50dip"
+        android:layout_marginLeft="40dip"
         android:layout_marginTop="460dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -132,9 +132,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse11"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="180dip"
+        android:layout_marginLeft="170dip"
         android:layout_marginTop="460dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
@@ -142,9 +142,9 @@
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse12"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="310dip"
+        android:layout_marginLeft="300dip"
         android:layout_marginTop="460dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"

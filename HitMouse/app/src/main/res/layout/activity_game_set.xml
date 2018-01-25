@@ -16,116 +16,150 @@
         android:textSize="30sp"
         android:text="遊戲設定" />
 
-    <TextView
-        android:id="@+id/txtMusic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:textSize="20sp"
-        android:text="TextView"
-        tools:text="音量大小" />
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center">
-    <ImageButton
-        android:id="@+id/up"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/up" />
-
-    <ImageButton
-        android:id="@+id/down"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:scaleType="fitXY"
-        app:srcCompat="@drawable/down" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/TxtVib"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="震動" />
+        android:layout_gravity="center_horizontal">
 
-    <RadioGroup
-        android:id="@+id/RadioGroupVib"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
-        <RadioButton
-            android:id="@+id/vibOn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="開" />
-
-        <RadioButton
-            android:id="@+id/viboff"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="關" />
-
-
-</LinearLayout>
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/TxtSound"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="音效" />
-
-    <RadioGroup
-        android:id="@+id/RadioGroupSound"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-            <RadioButton
-                android:id="@+id/SoundOn"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtMusic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="開" />
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:text="音量大小"
+                android:textSize="20sp" />
 
-            <RadioButton
-                android:id="@+id/Soundoff"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="關" />
+                android:layout_gravity="center">
+
+                <ImageButton
+                    android:id="@+id/up"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/up" />
+
+                <ImageButton
+                    android:id="@+id/down"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="fitXY"
+                    app:srcCompat="@drawable/down" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/TxtVib"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:text="震動"
+                android:textSize="20sp" />
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/RadioGroupVib"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+
+                    <RadioButton
+                        android:id="@+id/vibOn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="開" />
+
+                    <RadioButton
+                        android:id="@+id/viboff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="關" />
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+
+            <TextView
+                android:id="@+id/TxtSound"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp"
+                android:text="音效"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <RadioGroup
+                    android:id="@+id/RadioGroupSound"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal">
+
+                    <RadioButton
+                        android:id="@+id/SoundOn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="開" />
+
+                    <RadioButton
+                        android:id="@+id/Soundoff"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="關" />
+                </RadioGroup>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="30dp">
+
+                <Button
+                    android:id="@+id/BtnSet"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="確認變更" />
+
+                <Button
+                    android:id="@+id/BtnCancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="返回" />
+
+            </LinearLayout>
         </LinearLayout>
-    </RadioGroup>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-    <Button
-        android:id="@+id/BtnSet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="確認變更" />
-
-    <Button
-        android:id="@+id/BtnCancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="返回" />
-
-    </LinearLayout>
+    </ScrollView>
 
 
 </LinearLayout>

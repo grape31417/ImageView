@@ -23,7 +23,8 @@
         android:layout_marginLeft="500dip"
         android:layout_marginTop="0dip"
         android:text="30"
-        android:textSize="30sp" />
+        android:textSize="30sp"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse1"
@@ -33,7 +34,7 @@
         android:layout_marginTop="60dip"
         android:scaleType="fitXY"
         android:src="@drawable/mouse"
-        />
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse2"
@@ -42,7 +43,8 @@
         android:layout_marginLeft="280dip"
         android:layout_marginTop="60dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
 
     <com.felipecsl.gifimageview.library.GifImageView
@@ -52,7 +54,8 @@
         android:layout_marginLeft="500dip"
         android:layout_marginTop="60dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse4"
@@ -61,7 +64,8 @@
         android:layout_marginLeft="120dip"
         android:layout_marginTop="120dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse5"
@@ -70,7 +74,8 @@
         android:layout_marginLeft="320dip"
         android:layout_marginTop="120dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse6"
@@ -79,7 +84,8 @@
         android:layout_marginLeft="540dip"
         android:layout_marginTop="120dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse7"
@@ -88,7 +94,8 @@
         android:layout_marginLeft="70dip"
         android:layout_marginTop="170dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse8"
@@ -97,7 +104,8 @@
         android:layout_marginLeft="280dip"
         android:layout_marginTop="170dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse9"
@@ -106,7 +114,8 @@
         android:layout_marginLeft="510dip"
         android:layout_marginTop="170dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse10"
@@ -115,7 +124,8 @@
         android:layout_marginLeft="120dip"
         android:layout_marginTop="220dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
 
     <com.felipecsl.gifimageview.library.GifImageView
@@ -125,7 +135,8 @@
         android:layout_marginLeft="330dip"
         android:layout_marginTop="220dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <com.felipecsl.gifimageview.library.GifImageView
         android:id="@+id/mouse12"
@@ -134,7 +145,8 @@
         android:layout_marginLeft="560dip"
         android:layout_marginTop="220dip"
         android:scaleType="fitXY"
-        android:src="@drawable/mouse" />
+        android:src="@drawable/mouse"
+        android:visibility="invisible"/>
 
     <ImageView
         android:id="@+id/imghammer"
@@ -142,7 +154,8 @@
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:src="@drawable/hammer1"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        />
 
 
 </FrameLayout>

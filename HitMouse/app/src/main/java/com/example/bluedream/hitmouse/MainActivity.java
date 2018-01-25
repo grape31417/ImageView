@@ -43,7 +43,9 @@ public class MainActivity extends AppCompatActivity {
     OkHttpClient client = new OkHttpClient();
     @BindView(R.id.GetItem)
     Button GetItem;
-    private boolean getadddtime=false;
+    @BindView(R.id.gameset)
+    Button gameset;
+    private boolean getadddtime = false;
 
 
     @Override
@@ -52,18 +54,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         scoresave = getSharedPreferences("scoresave", MODE_PRIVATE);
+        firstplay = getSharedPreferences("first_play", MODE_PRIVATE);
         firstplayset();
         locateUser();
     }
 
     private void firstplayset() {
-        firstplay = getSharedPreferences("first_play", MODE_PRIVATE);
+
         if (firstplay.getBoolean("first_play", false) == false) {
             firstplay.edit().putBoolean("first_play", true).commit();
             scoresave.edit().putString("name1", "").putInt("score1", 0).putString("lat1", "0").putString("lng1", "0").commit();
             scoresave.edit().putString("name2", "").putInt("score2", 0).putString("lat2", "0").putString("lng2", "0").commit();
             scoresave.edit().putString("name3", "").putInt("score3", 0).putString("lat3", "0").putString("lng3", "0").commit();
-            scoresave.edit().putInt("timeadd",0).commit();
+            scoresave.edit().putInt("timeadd", 0).commit();
+            firstplay.edit().putInt("vib", 1).putInt("sound", 1).commit();
         }
     }
 
@@ -88,23 +92,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() == null) {
+        if (result != null) {
+            if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                if(result.getContents().equals("addtime"))
-                {
-                    Toast.makeText(this,"已獲得一個加時道具",Toast.LENGTH_SHORT).show();
-                    scoresave.edit().putInt("timeadd",scoresave.getInt("timeadd",0)+1).commit();
-                }
-                else
-                    Toast.makeText(this,"無效的條碼",Toast.LENGTH_SHORT).show();
+                if (result.getContents().equals("addtime")) {
+                    Toast.makeText(this, "已獲得一個加時道具", Toast.LENGTH_SHORT).show();
+                    scoresave.edit().putInt("timeadd", scoresave.getInt("timeadd", 0) + 1).commit();
+                } else
+                    Toast.makeText(this, "無效的條碼", Toast.LENGTH_SHORT).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -115,27 +115,26 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.GameStart)
     public void onGameStartClicked() {
-        Bundle bundle=new Bundle();
+        Bundle bundle = new Bundle();
         Intent it = new Intent();
-        Configuration configuration=getResources().getConfiguration();
+        Configuration configuration = getResources().getConfiguration();
         //获取屏幕方向
-        int l=configuration.ORIENTATION_LANDSCAPE;
-        int p=configuration.ORIENTATION_PORTRAIT;
-        if (configuration.orientation==l) {
+        int l = configuration.ORIENTATION_LANDSCAPE;
+        int p = configuration.ORIENTATION_PORTRAIT;
+        if (configuration.orientation == l) {
             //System.out.println("现在是横屏");
-            bundle.putInt("windowset",2);
+            bundle.putInt("windowset", 2);
         }
-        if (configuration.orientation==p) {
-           bundle.putInt("windowset",1);
+        if (configuration.orientation == p) {
+            bundle.putInt("windowset", 1);
             //System.out.println("现在是竖屏");
         }
 
-         it.putExtras(bundle);
+        it.putExtras(bundle);
 
         it.setClass(MainActivity.this, GameActivitty.class);
         startActivity(it);
     }
-
 
 
     @OnClick(R.id.HighScore)
@@ -172,4 +171,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    @OnClick(R.id.gameset)
+    public void ongamesetClicked() {
+        Intent it = new Intent();
+        it.setClass(MainActivity.this, GameSetActivity.class);
+        startActivity(it);
+
+
+
+    }
 }
